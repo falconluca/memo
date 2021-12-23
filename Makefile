@@ -17,3 +17,7 @@ protoc:
   		--go-grpc_out=:$$(dirname $$file) --go-grpc_opt=paths=source_relative \
   		$$file; \
 	done
+
+.PHONY: wire
+wire:
+	wire ./cmd/server
