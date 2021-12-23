@@ -40,6 +40,6 @@ func (r repository) Get(id int64) (item *Item, err error) {
 
 func (r repository) List() ([]*Item, error) {
 	var items []*Item
-	err := r.db.Find(items).Error
+	err := r.db.Find(&items).Error
 	return items, err
 }
