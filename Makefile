@@ -31,3 +31,28 @@ wire:
 .PHONY: docker-build
 docker-build:
 	docker build -t shaohsiung/memo:latest -f ./Dockerfile .
+
+.PHONY: docker-push
+docker-push:
+	docker push shaohsiung/memo:latest
+
+.PHONY: kube-deploy-mysql
+kube-deploy-mysql:
+	kubectl apply -f k8s/mysql.yaml
+	kubectl rollout status deploy/mysql
+
+.PHONY: kube-deploy-memo
+kube-deploy-mysql:
+	kubectl apply -f k8s/memo.yaml
+	kubectl rollout status deploy/memo
+
+.PHONY: kube-port-forward
+	kubectl port-forward $$(kubectl get pod -l app=memo -o jsonpath="{.items[0].metadata.name}") 50051:50051
+
+.PHONY: kube-deploy-all
+	make kube-deploy-mysql
+	make kube-deploy-memo
+	make kube-port-forward
+
+.PHONY: kube-delete-all
+	kubectl delete -f k8s/

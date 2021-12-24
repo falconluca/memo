@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memo
+  labels:
+    app: memo
+spec:
+  #replicas: 2
+  selector:
+    matchLabels:
+      app: memo
+  template:
+    metadata:
+      labels:
+        app: memo
+    spec:
+      containers:
+      - name: memo
+        # https://github.com/aws-observability/aws-otel-collector/issues/784#issuecomment-993054020
+        image: shaohsiung/memo:x86_64
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 50051
+      volumes:
+        - name: memo
+          configMap:
+            name: memo
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: memo
+data:
+  config.yaml: |-
+    grpc:
+      port: :50051
+    dsn: root:root@tcp(mysql:3306)/memo?charset=utf8mb4&parseTime=True&loc=Local
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: memo
+spec:
+  selector:
+    app: memo
+  ports:
+  - port: 50051
+    targetPort: 50051
+    appProtocol: grpc
