@@ -21,3 +21,7 @@ protoc:
 .PHONY: wire
 wire:
 	wire ./cmd/server
+
+.PHONY: docker-build
+docker-build:
+	docker build -t shaohsiung/memo:latest -f ./Dockerfile .

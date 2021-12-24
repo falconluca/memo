@@ -1,0 +1,25 @@
+version: "3.1"
+services:
+  server:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "50051:50051"
+    depends_on:
+      - mysql
+  mysql:
+    image: "mysql:5.7"
+    platform: "linux/x86_64"
+    environment:
+      MYSQL_DATABASE: memo
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - .dbdata:/var/lib/mysql:rw
+      # https://gist.github.com/onjin/2dd3cc52ef79069de1faa2dfd456c945#gistcomment-2163519
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./mysql_custom.cnf:/etc/mysql/conf.d/custom.cnf
+    ports:
+      - "3306:3306"
+    restart: always
