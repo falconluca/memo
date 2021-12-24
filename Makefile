@@ -47,12 +47,15 @@ kube-deploy-mysql:
 	kubectl rollout status deploy/memo
 
 .PHONY: kube-port-forward
+kube-port-forward:
 	kubectl port-forward $$(kubectl get pod -l app=memo -o jsonpath="{.items[0].metadata.name}") 50051:50051
 
 .PHONY: kube-deploy-all
+kube-deploy-all:
 	make kube-deploy-mysql
 	make kube-deploy-memo
 	make kube-port-forward
 
 .PHONY: kube-delete-all
+kube-delete-all:
 	kubectl delete -f k8s/

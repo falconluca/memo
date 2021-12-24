@@ -6,11 +6,11 @@
 | ---- | ---- |
 | `make init` | 安装 protoc-gen-go, protoc-gen-go-grpc 和 wire |
 | `make protoc` | 根据 proto 文件生成 *.pb.go 和 *_grpc.pb.go |
-| `make wire` | 依赖注入, 根据wire.go 文件生成 wire_gen.go |
+| `make wire` | 依赖注入, 根据 wire.go 文件生成 wire_gen.go |
 | `make docker-build` | 构建 docker 镜像 |
 | `make kube-deploy-mysql` | 在 k8s 集群中部署 MySQL 服务 |
 | `make kube-deploy-memo` | 在 k8s 集群中部署 Memo 服务 |
-| `make kube-port-forward` | 开启Memo服务测试入口 |
+| `make kube-port-forward` | 开启 Memo 服务测试入口 |
 | `make kube-deploy-all` | 在 k8s 集群中部署所有资源 |
 | `make kube-delete-all` | 在 k8s 集群中删除所有资源 |
 
