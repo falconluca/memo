@@ -42,15 +42,19 @@ func main() {
 		}
 	}()
 
+	// 捕获 SIGINT, SIGTERM 信号
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
 	<-ch
+	close(ch)
 	log.Println("shutting down the grpcServer")
 
+	// 5秒内没有完成优雅的关停, 那么就直接退出
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	grpcServer.GracefulStop()
-	<-ctx.Done()
-	close(ch)
-	log.Println("graceful shutdown end")
+	select {
+	case <-ctx.Done():
+		log.Println("graceful shutdown end")
+	}
 }

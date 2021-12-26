@@ -16,6 +16,7 @@ protoc:
 	fi
 	@if ! which protoc-gen-go-grpc > /dev/null; then \
   		echo "protoc-gen-go-grpc not install" >&2; \
+  		exit 1; \
 	fi
 	for file in $$(git ls-files '*.proto'); do \
   		protoc -I $$(dirname $$file) \
